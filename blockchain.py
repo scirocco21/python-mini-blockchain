@@ -7,7 +7,7 @@ class Block:
     self.transactions = transactions
     self.previous_hash = previous_hash
     self.nonce = nonce
-    # self.hash = self.generate_hash()
+    self.hash = self.generate_hash()
 
   def print_block(self):
     # prints block contents
@@ -16,5 +16,9 @@ class Block:
     print("current hash:", self.generate_hash())
 
   def generate_hash(self):
-    # hash the blocks contents
+     # concatenate block properties into big string
+    block_contents = str(self.timestamp) + str(self.transactions) + str(self.previous_hash) + str(self.nonce)
+    # then hash that string with the 256 module (don't forget to call encode on the string)
+    block_hash = sha256(block_contents.encode())
+    return block_hash.hexdigest()
     pass
