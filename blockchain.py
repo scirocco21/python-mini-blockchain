@@ -1,24 +1,14 @@
-from datetime import datetime
-from hashlib import sha256
+#imports the Block class from block.py
+from block import Block
 
-class Block:
-  def __init__(self, transactions, previous_hash, nonce = 0):
-    self.timestamp = datetime.now()
-    self.transactions = transactions
-    self.previous_hash = previous_hash
-    self.nonce = nonce
-    self.hash = self.generate_hash()
+class Blockchain:
+    def __init__(self):
+      self.chain = []
+      self.all_transactions = []
+      self.genesis_block()
 
-  def print_block(self):
-    # prints block contents
-    print("timestamp:", self.timestamp)
-    print("transactions:", self.transactions)
-    print("current hash:", self.generate_hash())
-
-  def generate_hash(self):
-     # concatenate block properties into big string
-    block_contents = str(self.timestamp) + str(self.transactions) + str(self.previous_hash) + str(self.nonce)
-    # then hash that string with the 256 module (don't forget to call encode on the string)
-    block_hash = sha256(block_contents.encode())
-    return block_hash.hexdigest()
-    pass
+    def genesis_block(self):
+      transactions = []
+      previous_hash = "0"
+      self.chain.append(Block(transactions, previous_hash))
+      
