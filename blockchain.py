@@ -19,17 +19,21 @@ class Blockchain:
         print("Block {} {}".format(i, current_block))
         current_block.print_contents()
 
-    # add block to blockchain `chain`
+    # add block to chain and return proof of work
     def add_block(self, transactions):
-      new_block = Block(transactions, self.chain[len(self.chain) - 1].hash)
+      previous_hash = (self.chain[len(self.chain)-1]).hash
+      new_block = Block(transactions, previous_hash)
+      new_block.generate_hash()
+      proof = self.proof_of_work(new_block, 3)
       self.chain.append(new_block)
-      pass
+      return proof, new_block
 
 
-  def validate_chain(self):
-    for i in range(1, len(self.chain)):
-      current = self.chain[i]
-      previous = self.chain[i-1]
+
+    def validate_chain(self):
+      for i in range(1, len(self.chain)):
+        current = self.chain[i]
+        previous = self.chain[i-1]
       if current.generate_hash() != current.hash:
       	return False
       elif previous.generate_hash() != current.previous_hash:
@@ -38,11 +42,11 @@ class Blockchain:
         return True
     pass
 
-    # basic proof of work method 
-  def proof_of_work(self,block, difficulty=2):
-    proof = block.generate_hash()
-    while proof[:difficulty] != '0'*difficulty:
-      block.nonce += 1
+    # basic proof of work method
+    def proof_of_work(self,block, difficulty=2):
       proof = block.generate_hash()
-    block.nonce = 0
-    return proof
+      while proof[:difficulty] != '0'*difficulty:
+        block.nonce += 1
+        proof = block.generate_hash()
+       block.nonce = 0
+      return proof
