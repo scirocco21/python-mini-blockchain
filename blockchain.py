@@ -28,14 +28,15 @@ class Blockchain:
       self.chain.append(new_block)
       return proof, new_block
 
-
-
+      # add basic valdiations
     def validate_chain(self):
       for i in range(1, len(self.chain)):
         current = self.chain[i]
         previous = self.chain[i-1]
+        # 1. if current block has been tampered with, the stored value of its hash will not equal the hash it generates based on its transations and other properties
       if current.generate_hash() != current.hash:
       	return False
+        # 2. If the block is discontinuous with the chain, the chain is invalid also
       elif previous.generate_hash() != current.previous_hash:
         return False
       else:
